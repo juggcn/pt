@@ -1,4 +1,7 @@
 #include "pt-timer.h"
+#include "stdint.h"
+
+extern uint32_t HAL_GetTick(void);
 
 static unsigned int timer_get_tick(void)
 {

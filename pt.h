@@ -51,8 +51,16 @@
 
 #include "lc.h"
 
+#include "pt-timer.h"
+
+#include "pt-signal.h"
+
+#include "pt-sem.h"
+
 struct pt {
   lc_t lc;
+  pt_timer t;
+  unsigned char signal;
 };
 
 #define PT_WAITING 0

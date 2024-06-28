@@ -33,10 +33,13 @@
 #ifndef __PT_TIMER__
 #define __PT_TIMER__
 
-#define timer_get_tick HAL_GetTick
+#include "stdint.h"
 
 #define PT_WAIT_MS(pt, time) PT_TIMER_DELAY(pt, time)
-// #define PT_WAIT_US(pt, time) PT_TIMER_MICRODELAY(pt, time)
+#define PT_WAIT_US(pt, time) PT_TIMER_MICRODELAY(pt, time)
+
+extern uint32_t millis(void);
+extern uint32_t micros(void);
 
 typedef unsigned long pt_timer;
 
@@ -48,11 +51,11 @@ typedef unsigned long pt_timer;
 /**
  * Delay for specific milliseconds
  */
-#define PT_TIMER_DELAY(pt, time)                                                 \
-    do                                                                           \
-    {                                                                            \
-        (pt)->t = timer_get_tick();                                              \
-        PT_WAIT_UNTIL((pt), ((pt_timer)(timer_get_tick() - (pt)->t) >= (time))); \
+#define PT_TIMER_DELAY(pt, time)                                         \
+    do                                                                   \
+    {                                                                    \
+        (pt)->t = millis();                                              \
+        PT_WAIT_UNTIL((pt), ((pt_timer)(millis() - (pt)->t) >= (time))); \
     } while (0)
 
 /**
@@ -63,12 +66,12 @@ typedef unsigned long pt_timer;
 /**
  * Delay for specific microseconds
  */
-// #define PT_TIMER_MICRODELAY(pt, time)                                    \
-//     do                                                                   \
-//     {                                                                    \
-//         (pt)->t = micros();                                              \
-//         PT_WAIT_UNTIL((pt), ((pt_timer)(micros() - (pt)->t) >= (time))); \
-//     } while (0)
+#define PT_TIMER_MICRODELAY(pt, time)                                    \
+    do                                                                   \
+    {                                                                    \
+        (pt)->t = micros();                                              \
+        PT_WAIT_UNTIL((pt), ((pt_timer)(micros() - (pt)->t) >= (time))); \
+    } while (0)
 
 /**
  * \name Wait for some condition or timeout

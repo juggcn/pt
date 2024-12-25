@@ -33,13 +33,7 @@
 #ifndef __PT_TIMER__
 #define __PT_TIMER__
 
-#include "stdint.h"
-
-#define PT_WAIT_MS(pt, time) PT_TIMER_DELAY(pt, time)
-#define PT_WAIT_US(pt, time) PT_TIMER_MICRODELAY(pt, time)
-
-extern uint32_t millis(void);
-extern uint32_t micros(void);
+#include "pt-port.h"
 
 typedef unsigned long pt_timer;
 
@@ -81,11 +75,11 @@ typedef unsigned long pt_timer;
 /**
  * Wait for condition's becoming true or timeout
  */
-#define PT_TIMER_WAIT_TIMEOUT(pt, condition, t)                                              \
-    do                                                                                       \
-    {                                                                                        \
-        (pt)->t = timer_get_tick();                                                          \
-        PT_WAIT_UNTIL((pt), (condition) || ((pt_timer)(timer_get_tick() - (pt)->t) >= (t))); \
+#define PT_TIMER_WAIT_TIMEOUT(pt, condition, time)                                      \
+    do                                                                                  \
+    {                                                                                   \
+        (pt)->t = millis();                                                             \
+        PT_WAIT_UNTIL((pt), (condition) || ((pt_timer)(millis() - (pt)->t) >= (time))); \
     } while (0)
 
 #endif
